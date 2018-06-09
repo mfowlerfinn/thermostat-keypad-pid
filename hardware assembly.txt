@@ -1,0 +1,25 @@
+layout parts for mounting
+
+run wires
+
+solder ds18b
+{
+	"Red connects to +5V, Blue/Black connects to ground, and Yellow/White is data"
+	data wire -> pin 11 + 4.7k pullup resistor to +5v
+}
+
+ssr activation leads
+{
+	black wire -> ground pin
+	signal wire -> pin 3
+	tinned ends
+}
+
+WARNING: MAINS VOLTAGE! splice heater wire into ssr (hot only)
+{
+	black color should be "hot", check continuity with plug end (narrow spade)
+	all exposed wire and solder must be covered in heat shrink (600v min)
+	tinned ends
+}
+
+arduino flash
