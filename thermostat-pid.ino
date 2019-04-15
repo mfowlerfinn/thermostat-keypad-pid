@@ -39,7 +39,7 @@ void setup()
 {
   Serial.begin(9600);
   analogWrite(SSRPin, 0);
-  Setpoint = 73;
+  Setpoint = 25;
   myPID.SetMode(AUTOMATIC);
   lcd.begin(16, 2);     // set up the LCD's number of columns and rows:
   mode = 0;             //for changing inputs
@@ -137,28 +137,27 @@ void loop()
   }
   
   celsius = (float)raw / 16.0;
-  fahrenheit = celsius * 1.8 + 32.0;
 
   duty = Output * 100;
   duty = duty / 255;
   
   lcd.setCursor(0,0);
-  lcd.print(Setpoint);
-  lcd.print("F");
-  lcd.print(" --> ");
-  lcd.print(fahrenheit);
-  lcd.println("F");
+  lcd.print(Setpoint,1);
+  lcd.print("c");
+  lcd.print("  now:");
+  lcd.print(celsius,1);
+  lcd.println("c");
   lcd.setCursor(0,1);
   char buffer [15];
-  sprintf(buffer, "  HEAT @ %3d", duty);
+  sprintf(buffer, "HEATER %3d / 100", duty);
   lcd.print(buffer); 
 
 
   Serial.print(Setpoint);
-  Serial.print("F");
-  Serial.print(" --> ");
-  Serial.print(fahrenheit);
-  Serial.println("F");
+  Serial.print("c");
+  Serial.print(" -> ");
+  Serial.print(celsius);
+  Serial.println("c");
   Serial.print("Duty = ");
   Serial.print(duty);
   Serial.println(" %  ");
@@ -166,7 +165,7 @@ void loop()
 
  
   
-  Input = fahrenheit;
+  Input = celsius;
 
 // PID SECTION
 
@@ -185,19 +184,6 @@ void loop()
 
   myPID.Compute();
   analogWrite(SSRPin, Output);
-
-
-// LCD BACKLIGHT TIMEOUT
-
-if (active == true)
-{
-  Timer = millis();
-  SafeBLon(pin_BL);
-}  
-if ( millis() - Timer >= Length )
-{
-  SafeBLoff(pin_BL);
-}
 
 // KEYPAD SECTION
 
